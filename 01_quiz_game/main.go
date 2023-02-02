@@ -47,5 +47,5 @@ func getQuestions(problemData string) ([]question, error) {
 
 func getQuestion(problem string) (question, error) {
 	//ans := strings.Split(problem, ",")
-	return question{}, nil
+	return question{a: 1, b: 2, ans: 3}, nil
 }
