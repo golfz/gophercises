@@ -15,4 +15,7 @@ func Test_getQuestion(t *testing.T) {
 	actual, err = getProblem("2+3,5")
 	assert.Nil(t, err)
 	assert.Equal(t, expect, actual)
+
+	actual, err = getProblem("2+3,aaaa")
+	assert.Error(t, err)
 }
