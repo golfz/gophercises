@@ -3,12 +3,13 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 )
 
 const defaultFileName = "problems.csv"
 
-type question struct {
+type problem struct {
 	a   int
 	b   int
 	ans int
@@ -37,15 +38,38 @@ func main() {
 	fmt.Println(string(dat))
 }
 
-func getQuestions(problemData string) ([]question, error) {
+func getQuestions(problemData string) ([]problem, error) {
 	//problems := strings.Split(problemData, "\n")
 	//for i, v := range problems {
 	//
 	//}
-	return []question{}, nil
+	return []problem{}, nil
 }
 
-func getQuestion(problem string) (question, error) {
-	//ans := strings.Split(problem, ",")
-	return question{a: 1, b: 2, ans: 3}, nil
+func getProblem(sProblem string) (problem, error) {
+	// example: 1+2,3
+	sProblem = strings.TrimSpace(sProblem)
+
+	splitAns := strings.Split(sProblem, ",")
+	sAns := strings.TrimSpace(splitAns[1])
+	ans, err := strconv.Atoi(sAns)
+	if err != nil {
+		return problem{}, err
+	}
+
+	sProblem = strings.TrimSpace(splitAns[0])
+	splitProblem := strings.Split(sProblem, "+")
+	sA := strings.TrimSpace(splitProblem[0])
+	a, err := strconv.Atoi(sA)
+	if err != nil {
+		return problem{}, err
+	}
+
+	sB := strings.TrimSpace(splitProblem[1])
+	b, err := strconv.Atoi(sB)
+	if err != nil {
+		return problem{}, err
+	}
+
+	return problem{a: a, b: b, ans: ans}, nil
 }
