@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func Test_getQuestion(t *testing.T) {
+func Test_getProblem(t *testing.T) {
 	expect := problem{a: 1, b: 2, ans: 3}
 	actual, err := getProblem("1+2,3")
 	assert.Nil(t, err)
