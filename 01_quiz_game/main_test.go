@@ -5,6 +5,20 @@ import (
 	"testing"
 )
 
+func Test_getProblemList(t *testing.T) {
+	raw := `
+	1+2,3
+	2+3,5
+	`
+	expected := []problem{
+		{a: 1, b: 2, ans: 3},
+		{a: 2, b: 3, ans: 5},
+	}
+	actual, err := getProblemList(raw)
+	assert.NoError(t, err)
+	assert.Equal(t, expected, actual)
+}
+
 func Test_getProblem(t *testing.T) {
 	expect := problem{a: 1, b: 2, ans: 3}
 	actual, err := getProblem("1+2,3")

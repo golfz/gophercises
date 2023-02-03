@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strconv"
@@ -38,17 +39,32 @@ func main() {
 	fmt.Println(string(dat))
 }
 
-func getQuestions(problemData string) ([]problem, error) {
-	//problems := strings.Split(problemData, "\n")
-	//for i, v := range problems {
-	//
-	//}
-	return []problem{}, nil
+func getProblemList(problemData string) ([]problem, error) {
+	var problemList []problem
+
+	rawProblemList := strings.Split(problemData, "\n")
+
+	fmt.Println(rawProblemList)
+	fmt.Println(len(rawProblemList))
+
+	for i, v := range rawProblemList {
+		fmt.Printf("%d:%#v\n", i, v)
+		prob, err := getProblem(v)
+		if err != nil {
+			continue
+		}
+		problemList = append(problemList, prob)
+	}
+
+	return problemList, nil
 }
 
 func getProblem(sProblem string) (problem, error) {
 	// example: 1+2,3
 	sProblem = strings.TrimSpace(sProblem)
+	if sProblem == "" {
+		return problem{}, errors.New("problem string is empty")
+	}
 
 	splitAns := strings.Split(sProblem, ",")
 	sAns := strings.TrimSpace(splitAns[1])
