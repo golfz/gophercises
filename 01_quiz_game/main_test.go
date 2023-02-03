@@ -9,6 +9,9 @@ func Test_getProblemList(t *testing.T) {
 	raw := `
 	1+2,3
 	2+3,5
+	3+4,
+	+4,7
+	2+3,aaa
 	`
 	expected := []problem{
 		{a: 1, b: 2, ans: 3},
@@ -31,5 +34,11 @@ func Test_getProblem(t *testing.T) {
 	assert.Equal(t, expect, actual)
 
 	actual, err = getProblem("2+3,aaaa")
+	assert.Error(t, err)
+
+	actual, err = getProblem("2+3,")
+	assert.Error(t, err)
+
+	actual, err = getProblem("+3,6")
 	assert.Error(t, err)
 }

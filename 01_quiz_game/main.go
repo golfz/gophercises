@@ -67,6 +67,9 @@ func getProblem(sProblem string) (problem, error) {
 	}
 
 	splitAns := strings.Split(sProblem, ",")
+	if len(splitAns) != 2 {
+		return problem{}, errors.New("raw problem format was wrong")
+	}
 	sAns := strings.TrimSpace(splitAns[1])
 	ans, err := strconv.Atoi(sAns)
 	if err != nil {
@@ -75,6 +78,9 @@ func getProblem(sProblem string) (problem, error) {
 
 	sProblem = strings.TrimSpace(splitAns[0])
 	splitProblem := strings.Split(sProblem, "+")
+	if len(splitAns) != 2 {
+		return problem{}, errors.New("raw problem format was wrong")
+	}
 	sA := strings.TrimSpace(splitProblem[0])
 	a, err := strconv.Atoi(sA)
 	if err != nil {
