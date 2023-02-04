@@ -36,7 +36,25 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println(string(dat))
+	problemList, err := getProblemList(string(dat))
+	if err != nil {
+		panic(err)
+	}
+
+	for _, p := range problemList {
+		fmt.Printf("what %d+%d, sir?,", p.a, p.b)
+		var ans int
+		_, err := fmt.Scanf("%d\n", &ans)
+		if err != nil {
+			panic(err)
+		}
+
+		if ans == p.ans {
+			fmt.Println("Correct!")
+		} else {
+			fmt.Println("Wrong!")
+		}
+	}
 }
 
 func getProblemList(problemData string) ([]problem, error) {
