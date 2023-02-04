@@ -41,4 +41,7 @@ func Test_getProblem(t *testing.T) {
 
 	actual, err = getProblem("+3,6")
 	assert.Error(t, err)
+
+	actual, err = getProblem("2+3,6")
+	assert.Error(t, err)
 }

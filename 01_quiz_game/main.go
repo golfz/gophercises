@@ -93,5 +93,13 @@ func getProblem(sProblem string) (problem, error) {
 		return problem{}, err
 	}
 
+	if !validateProblem(problem{a: a, b: b, ans: ans}) {
+		return problem{}, errors.New("raw problem format was wrong")
+	}
+
 	return problem{a: a, b: b, ans: ans}, nil
+}
+
+func validateProblem(p problem) bool {
+	return p.a+p.b == p.ans
 }
