@@ -44,11 +44,7 @@ func getProblemList(problemData string) ([]problem, error) {
 
 	rawProblemList := strings.Split(problemData, "\n")
 
-	fmt.Println(rawProblemList)
-	fmt.Println(len(rawProblemList))
-
-	for i, v := range rawProblemList {
-		fmt.Printf("%d:%#v\n", i, v)
+	for _, v := range rawProblemList {
 		prob, err := getProblem(v)
 		if err != nil {
 			continue
@@ -93,13 +89,9 @@ func getProblem(sProblem string) (problem, error) {
 		return problem{}, err
 	}
 
-	if !validateProblem(problem{a: a, b: b, ans: ans}) {
+	if a+b != ans {
 		return problem{}, errors.New("raw problem format was wrong")
 	}
 
 	return problem{a: a, b: b, ans: ans}, nil
-}
-
-func validateProblem(p problem) bool {
-	return p.a+p.b == p.ans
 }
