@@ -68,6 +68,8 @@ func main() {
 	fmt.Printf("You have %d seconds to answer, press enter for starting: ", timeout)
 	fmt.Scanln()
 
+	start := time.Now()
+
 	done := make(chan struct{})
 	go AskQuestion(problemList, done)
 
@@ -78,7 +80,8 @@ func main() {
 		fmt.Println("\nTime out!")
 	}
 
-	fmt.Printf("Your score is %d/%d", score, len(problemList))
+	fmt.Printf("Your score is %d/%d\n", score, len(problemList))
+	fmt.Printf("Your time is %f seconds", time.Since(start).Seconds())
 }
 
 func AskQuestion(problemList []problems.Problem, done chan struct{}) {
