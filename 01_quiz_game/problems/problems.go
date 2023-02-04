@@ -3,8 +3,10 @@ package problems
 import (
 	"errors"
 	"gophercises/01_quiz_game/csv"
+	"math/rand"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type Problem struct {
@@ -72,5 +74,9 @@ func getProblem(question string, ans string) (Problem, error) {
 }
 
 func Shuffle(problemList []Problem) []Problem {
+	rand.Seed(time.Now().UnixNano())
+	rand.Shuffle(len(problemList), func(i, j int) {
+		problemList[i], problemList[j] = problemList[j], problemList[i]
+	})
 	return problemList
 }
