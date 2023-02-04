@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"gophercises/01_quiz_game/problems"
 	"os"
+	"strconv"
 	"strings"
+	"time"
 )
 
 const (
@@ -13,13 +15,15 @@ const (
 )
 
 var (
-	fileName             string
-	useTimer, useShuffle bool
-	timeout              int
-	score                int
+	fileName   string
+	useShuffle bool
+	timeout    int
+	score      int
 )
 
 func main() {
+	timeout = defaultTimeout
+
 	for i, v := range os.Args {
 		if v == "-h" || v == "--help" {
 			fmt.Println("Usage: quiz-game [--file=FILENAME] [--timer=TIMEOUT] [--shuffle]")
@@ -29,7 +33,12 @@ func main() {
 			fileName = os.Args[i+1]
 		}
 		if v == "--timer" {
-			useTimer = true
+			sTimeout := os.Args[i+1]
+			iTimeout, err := strconv.Atoi(sTimeout)
+			if err != nil {
+				panic(err)
+			}
+			timeout = iTimeout
 		}
 		if v == "--shuffle" {
 			useShuffle = true
@@ -52,9 +61,29 @@ func main() {
 		panic(err)
 	}
 
-	for _, problem := range problemList {
+	if useShuffle {
+		problemList = problems.Shuffle(problemList)
+	}
 
-		fmt.Printf("%d + %d = ", problem.A, problem.B)
+	fmt.Printf("You have %d seconds to answer, press enter for starting: ", timeout)
+	fmt.Scanln()
+
+	done := make(chan struct{})
+	go AskQuestion(problemList, done)
+
+	select {
+	case <-done:
+		break
+	case <-time.After(time.Duration(timeout) * time.Second):
+		fmt.Println("\nTime out!")
+	}
+
+	fmt.Printf("Your score is %d/%d", score, len(problemList))
+}
+
+func AskQuestion(problemList []problems.Problem, done chan struct{}) {
+	for i, problem := range problemList {
+		fmt.Printf("#%d: %d + %d = ", i+1, problem.A, problem.B)
 		var ans int
 		_, err := fmt.Scanf("%d\n", &ans)
 		if err != nil {
@@ -65,6 +94,5 @@ func main() {
 			score++
 		}
 	}
-
-	fmt.Printf("Your score is %d/%d", score, len(problemList))
+	done <- struct{}{}
 }

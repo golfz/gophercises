@@ -70,3 +70,7 @@ func getProblem(question string, ans string) (Problem, error) {
 
 	return problem, nil
 }
+
+func Shuffle(problemList []Problem) []Problem {
+	return problemList
+}
