@@ -1,27 +1,38 @@
 package main
 
 import (
-	"errors"
 	"fmt"
+	"gophercises/01_quiz_game/problems"
 	"os"
-	"strconv"
 	"strings"
 )
 
-const defaultFileName = "problems.csv"
+const (
+	defaultFileName = "problems.csv"
+	defaultTimeout  = 30
+)
 
-type problem struct {
-	a   int
-	b   int
-	ans int
-}
+var (
+	fileName             string
+	useTimer, useShuffle bool
+	timeout              int
+	score                int
+)
 
 func main() {
-	var fileName string
 	for i, v := range os.Args {
-		if v == "-f" {
+		if v == "-h" || v == "--help" {
+			fmt.Println("Usage: quiz-game [--file=FILENAME] [--timer=TIMEOUT] [--shuffle]")
+			return
+		}
+		if v == "--file" {
 			fileName = os.Args[i+1]
-			break
+		}
+		if v == "--timer" {
+			useTimer = true
+		}
+		if v == "--shuffle" {
+			useShuffle = true
 		}
 	}
 
@@ -36,80 +47,24 @@ func main() {
 		panic(err)
 	}
 
-	problemList, err := getProblemList(string(dat))
+	problemList, err := problems.GetProblemList(string(dat))
 	if err != nil {
 		panic(err)
 	}
 
-	for _, p := range problemList {
-		fmt.Printf("what %d+%d, sir?,", p.a, p.b)
+	for _, problem := range problemList {
+
+		fmt.Printf("%d + %d = ", problem.A, problem.B)
 		var ans int
 		_, err := fmt.Scanf("%d\n", &ans)
 		if err != nil {
 			panic(err)
 		}
 
-		if ans == p.ans {
-			fmt.Println("Correct!")
-		} else {
-			fmt.Println("Wrong!")
+		if ans == problem.Ans {
+			score++
 		}
 	}
-}
 
-func getProblemList(problemData string) ([]problem, error) {
-	var problemList []problem
-
-	rawProblemList := strings.Split(problemData, "\n")
-
-	for _, v := range rawProblemList {
-		prob, err := getProblem(v)
-		if err != nil {
-			continue
-		}
-		problemList = append(problemList, prob)
-	}
-
-	return problemList, nil
-}
-
-func getProblem(sProblem string) (problem, error) {
-	// example: 1+2,3
-	sProblem = strings.TrimSpace(sProblem)
-	if sProblem == "" {
-		return problem{}, errors.New("problem string is empty")
-	}
-
-	splitAns := strings.Split(sProblem, ",")
-	if len(splitAns) != 2 {
-		return problem{}, errors.New("raw problem format was wrong")
-	}
-	sAns := strings.TrimSpace(splitAns[1])
-	ans, err := strconv.Atoi(sAns)
-	if err != nil {
-		return problem{}, err
-	}
-
-	sProblem = strings.TrimSpace(splitAns[0])
-	splitProblem := strings.Split(sProblem, "+")
-	if len(splitAns) != 2 {
-		return problem{}, errors.New("raw problem format was wrong")
-	}
-	sA := strings.TrimSpace(splitProblem[0])
-	a, err := strconv.Atoi(sA)
-	if err != nil {
-		return problem{}, err
-	}
-
-	sB := strings.TrimSpace(splitProblem[1])
-	b, err := strconv.Atoi(sB)
-	if err != nil {
-		return problem{}, err
-	}
-
-	if a+b != ans {
-		return problem{}, errors.New("raw problem format was wrong")
-	}
-
-	return problem{a: a, b: b, ans: ans}, nil
+	fmt.Printf("Your score is %d/%d", score, len(problemList))
 }

@@ -1,4 +1,4 @@
-package main
+package problems
 
 import (
 	"github.com/stretchr/testify/assert"
@@ -13,35 +13,35 @@ func Test_getProblemList(t *testing.T) {
 	+4,7
 	2+3,aaa
 	`
-	expected := []problem{
-		{a: 1, b: 2, ans: 3},
-		{a: 2, b: 3, ans: 5},
+	expected := []Problem{
+		{A: 1, B: 2, Ans: 3},
+		{A: 2, B: 3, Ans: 5},
 	}
-	actual, err := getProblemList(raw)
+	actual, err := GetProblemList(raw)
 	assert.NoError(t, err)
 	assert.Equal(t, expected, actual)
 }
 
 func Test_getProblem(t *testing.T) {
-	expect := problem{a: 1, b: 2, ans: 3}
-	actual, err := getProblem("1+2,3")
+	expect := Problem{A: 1, B: 2, Ans: 3}
+	actual, err := getProblem("1+2", "3")
 	assert.Nil(t, err)
 	assert.Equal(t, expect, actual)
 
-	expect = problem{a: 2, b: 3, ans: 5}
-	actual, err = getProblem("2+3,5")
+	expect = Problem{A: 2, B: 3, Ans: 5}
+	actual, err = getProblem("2+3", "5")
 	assert.Nil(t, err)
 	assert.Equal(t, expect, actual)
 
-	actual, err = getProblem("2+3,aaaa")
+	actual, err = getProblem("2+3", "aaaa")
 	assert.Error(t, err)
 
-	actual, err = getProblem("2+3,")
+	actual, err = getProblem("2+3", "")
 	assert.Error(t, err)
 
-	actual, err = getProblem("+3,6")
+	actual, err = getProblem("+3", "6")
 	assert.Error(t, err)
 
-	actual, err = getProblem("2+3,6")
+	actual, err = getProblem("2+3", "6")
 	assert.Error(t, err)
 }
