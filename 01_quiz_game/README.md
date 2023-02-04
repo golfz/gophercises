@@ -1,5 +1,46 @@
 # Exercise #1: Quiz Game
 
+## Run
+
+### Help
+
+```bash
+go run main.go -h
+```
+
+### Run with default csv file
+
+```bash
+go run main.go
+```
+
+### Run with custom csv file
+
+```bash
+go run main.go --file="problems.csv"
+```
+
+### Run with custom csv file and time timer
+
+```bash
+
+go run main.go --file="problems.csv" --timer=10
+```
+
+### Run with custom csv file and time timer and shuffle
+
+```bash
+go run main.go --file="problems.csv" --timer=10 --shuffle
+```
+
+### Test
+
+```bash
+go test -v ./...
+```
+
+---
+
 ## Exercise details
 
 This exercise is broken into two parts to help simplify the process of explaining it as well as to make it easier to
